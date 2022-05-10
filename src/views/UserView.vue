@@ -1,6 +1,6 @@
 <template>
   <div>
-    UserView
+    Hello World
   </div>
 </template>
 
