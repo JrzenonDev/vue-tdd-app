@@ -4,22 +4,49 @@ import VUserSearchForm from '@/components/VUserSearchForm'
 import VUserProfile from '@/components/VUserProfile'
 
 describe('UserView', () => {
+  const build = () => {
+    const wrapper = shallowMount(UserView, {
+      data: () => ({
+        user: {}
+      })
+    })
+
+    return {
+      wrapper,
+      userSearchForm: () => wrapper.find(VUserSearchForm),
+      userProfile: () => wrapper.find(VUserProfile)
+    }
+  }
+
+  // test renders the compoent
   it('renders the component', () => {
     // arrange
-    const wrapper = shallowMount(UserView)
-
+    const { wrapper } = build()
     // assert
     expect(wrapper.html()).toMatchSnapshot()
   })
 
+  // test renders main child components
   it('renders main child components', () => {
     // arrange
-    const wrapper = shallowMount(UserView)
-    const userSearchForm = wrapper.find(VUserSearchForm)
-    const userProfile = wrapper.find(VUserProfile)
+    const { userSearchForm, userProfile } = build()
 
     // assert
-    expect(userSearchForm.exists()).toBe(true)
-    expect(userProfile.exists()).toBe(true)
+    expect(userSearchForm().exists()).toBe(true)
+    expect(userProfile().exists()).toBe(true)
+  })
+
+  // test passes bind
+  it('passes a binded user prop to user profile component', () => {
+    // arrange
+    const { wrapper, userProfile } = build()
+    wrapper.setData({
+      user: {
+        name: 'JrzenonDev'
+      }
+    })
+
+    // assert
+    expect(userProfile().vm.user).toBe(wrapper.vm.user)
   })
 })
